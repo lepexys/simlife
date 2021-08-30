@@ -65,7 +65,7 @@ SpringJoint2D:
   m_GameObject: {fileID: 4944106940042649861}
   m_Enabled: 1
   serializedVersion: 4
-  m_EnableCollision: 1
+  m_EnableCollision: 0
   m_ConnectedRigidBody: {fileID: 4944106940042649912}
   m_BreakForce: Infinity
   m_BreakTorque: Infinity
@@ -73,9 +73,9 @@ SpringJoint2D:
   m_Anchor: {x: 0, y: -0.03}
   m_ConnectedAnchor: {x: 0, y: 0.03}
   m_AutoConfigureDistance: 0
-  m_Distance: 0.04
-  m_DampingRatio: 0
-  m_Frequency: 10
+  m_Distance: 0.1
+  m_DampingRatio: 0.2
+  m_Frequency: 20
 --- !u!212 &8590315891029174861
 SpriteRenderer:
   m_ObjectHideFlags: 0
