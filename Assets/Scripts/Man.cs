@@ -7,28 +7,47 @@ using UnityEngine.U2D;
 
 public class Man : MonoBehaviour
 {
-    public Body fab_head, fab_leg, fab_arm, fab_torso;
+    enum State { Idle,Walk, Turn,Run, Sit, Crawl};
+    bool is_left = true;
+    State state;
+    float walk_cicle = 0.0f;
+    public Body fab_head, fab_leg_low, fab_leg_high, fab_foot, fab_arm_high, fab_arm_low, fab_palm, fab_torso;
     private Body leg_high_l, leg_high_r, leg_low_r, leg_low_l, foot_r, foot_l, torso,head,arm_low_l, arm_low_r, arm_high_l, arm_high_r,palm_l,palm_r;
     private void Start()
     {
-        leg_high_l = Instantiate(this.fab_leg, this.transform.position+new Vector3(0.02f, -0.2f, 0), this.transform.rotation);
-        leg_high_r = Instantiate(this.fab_leg, this.transform.position + new Vector3(-0.02f, -0.2f, 0), this.transform.rotation);
-        leg_low_r = Instantiate(this.fab_leg, this.transform.position + new Vector3(-0.02f, -0.3f, 0), this.transform.rotation);
-        leg_low_l = Instantiate(this.fab_leg, this.transform.position + new Vector3(0.02f, -0.3f, 0), this.transform.rotation);
-        foot_r = Instantiate(this.fab_leg, this.transform.position + new Vector3(0.02f, -0.4f, 0), this.transform.rotation);
-        foot_l = Instantiate(this.fab_leg, this.transform.position + new Vector3(0.02f, -0.4f, 0), this.transform.rotation);
+        state = 0;
+        leg_high_l = Instantiate(this.fab_leg_high, this.transform.position+new Vector3(0, -0.2f, 0.1f), this.transform.rotation);
+        leg_high_r = Instantiate(this.fab_leg_high, this.transform.position + new Vector3(0, -0.2f, -0.1f), this.transform.rotation);
+        leg_low_r = Instantiate(this.fab_leg_low, this.transform.position + new Vector3(0, -0.3f, -0.1f), this.transform.rotation);
+        leg_low_l = Instantiate(this.fab_leg_low, this.transform.position + new Vector3(0, -0.3f, 0.1f), this.transform.rotation);
+        foot_r = Instantiate(this.fab_foot, this.transform.position + new Vector3(0, -0.4f, -0.1f), this.transform.rotation);
+        foot_l = Instantiate(this.fab_foot, this.transform.position + new Vector3(0, -0.4f, 0.1f), this.transform.rotation);
         torso = Instantiate(this.fab_torso, this.transform.position, this.transform.rotation);
         head = Instantiate(this.fab_head, this.transform.position + new Vector3(0, 0.5f, 0), this.transform.rotation);
-        arm_low_l = Instantiate(this.fab_arm, this.transform.position + new Vector3(0.2f, -0.1f, 0), this.transform.rotation);
-        arm_low_r = Instantiate(this.fab_arm, this.transform.position + new Vector3(-0.2f, -0.1f, 0), this.transform.rotation);
-        arm_high_l = Instantiate(this.fab_arm, this.transform.position + new Vector3(0.2f, 0.1f, 0), this.transform.rotation);
-        arm_high_r = Instantiate(this.fab_arm, this.transform.position + new Vector3(-0.2f, 0.1f, 0), this.transform.rotation);
-        palm_l = Instantiate(this.fab_arm, this.transform.position + new Vector3(0.2f, -0.3f, 0), this.transform.rotation);
-        palm_r = Instantiate(this.fab_arm, this.transform.position + new Vector3(-0.2f, -0.3f, 0), this.transform.rotation);
-        arm_high_l.joint.connectedAnchor += new Vector2(0.06f, 0.05f);
-        arm_high_r.joint.connectedAnchor += new Vector2(-0.06f, 0.05f);
-        leg_high_l.joint.connectedAnchor += new Vector2(0.06f, -0.02f);
-        leg_high_r.joint.connectedAnchor += new Vector2(-0.06f, -0.02f);
+        arm_low_l = Instantiate(this.fab_arm_low, this.transform.position + new Vector3(0, -0.1f, 0.1f), this.transform.rotation);
+        arm_low_r = Instantiate(this.fab_arm_low, this.transform.position + new Vector3(0, -0.1f, -0.1f), this.transform.rotation);
+        arm_high_l = Instantiate(this.fab_arm_high, this.transform.position + new Vector3(0, 0.1f, 0.1f), this.transform.rotation);
+        arm_high_r = Instantiate(this.fab_arm_high, this.transform.position + new Vector3(0, 0.1f, -0.1f), this.transform.rotation);
+        palm_l = Instantiate(this.fab_palm, this.transform.position + new Vector3(0, -0.2f, 0.1f), this.transform.rotation);
+        palm_r = Instantiate(this.fab_palm, this.transform.position + new Vector3(0, -0.2f, -0.1f), this.transform.rotation);
+        leg_high_l.gameObject.gameObject.layer = 6;
+        leg_low_l.gameObject.layer = 6;
+        foot_l.gameObject.layer = 6;
+        arm_low_l.gameObject.layer = 6;
+        arm_high_l.gameObject.layer = 6;
+        palm_l.gameObject.layer = 6;
+        torso.gameObject.layer = 7;
+        head.gameObject.layer = 7;
+        leg_high_r.gameObject.layer = 8;
+        leg_low_r.gameObject.layer = 8;
+        foot_r.gameObject.layer = 8;
+        arm_low_r.gameObject.layer = 8;
+        arm_high_r.gameObject.layer = 8;
+        palm_r.gameObject.layer = 8;
+        arm_high_l.joint.connectedAnchor += new Vector2(0, 0.1f);
+        arm_high_r.joint.connectedAnchor += new Vector2(0, 0.1f);
+        leg_high_l.joint.connectedAnchor += new Vector2(0, -0.01f);
+        leg_high_r.joint.connectedAnchor += new Vector2(0, -0.01f);
         leg_high_l.joint.connectedBody = torso.rigid;
         leg_high_r.joint.connectedBody = torso.rigid;
         arm_high_l.joint.connectedBody = torso.rigid;
@@ -38,7 +57,6 @@ public class Man : MonoBehaviour
         arm_low_l.joint.connectedBody = arm_high_l.rigid;
         palm_r.joint.connectedBody = arm_low_r.rigid;
         palm_l.joint.connectedBody = arm_low_l.rigid;
-        leg_high_r.joint.connectedBody = torso.rigid;
         leg_low_l.joint.connectedBody= leg_high_l.rigid;
         leg_low_r.joint.connectedBody= leg_high_r.rigid;
         foot_l.joint.connectedBody= leg_low_l.rigid;
@@ -51,6 +69,52 @@ public class Man : MonoBehaviour
     }
     private void Update()
     {
-        torso.rigid.AddTorque(2.0f);
+        if (Input.GetKeyDown(KeyCode.A))
+        {
+            if (!is_left)
+                state = State.Turn;
+            else
+                state = State.Walk;
+        }
+        if (Input.GetKeyDown(KeyCode.D))
+        {
+            if (is_left)
+                state = State.Turn;
+            else
+                state = State.Walk;
+        }
+        if (Input.GetKeyUp(KeyCode.A) || Input.GetKeyUp(KeyCode.D))
+        {
+            if (state == State.Walk)
+                state = State.Idle;
+        }
+    }
+    private void FixedUpdate()
+    {
+        if (state == State.Walk)
+        {
+            walk_cicle += Time.fixedDeltaTime*4;
+            int sign = is_left ? 1 : -1;
+            if (Mathf.Sin(walk_cicle) * 30.0f * sign > sign * leg_high_l.targetRotation)
+            {
+                leg_low_l.targetRotation = (sign * 20.0f) + Mathf.Sin(walk_cicle) * 20.0f;
+                leg_low_r.targetRotation = -Mathf.Sin(walk_cicle) * 30.0f;
+            }
+            else
+            {
+                leg_low_r.targetRotation = (sign * 20.0f) - Mathf.Sin(walk_cicle) * 20.0f;
+                leg_low_l.targetRotation = Mathf.Sin(walk_cicle) * 30.0f;
+            }
+            leg_high_l.targetRotation = Mathf.Sin(walk_cicle) * 30.0f;
+            leg_high_r.targetRotation = -leg_high_l.targetRotation;
+        }
+        if (state == State.Turn)
+        {
+            state = State.Walk;
+            is_left = !is_left;
+            walk_cicle = 0.0f;
+            foot_r.targetRotation = -foot_r.targetRotation;
+            foot_l.targetRotation = -foot_l.targetRotation;
+        }
     }
 }

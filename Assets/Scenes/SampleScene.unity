@@ -123,6 +123,30 @@ NavMeshSettings:
     debug:
       m_Flags: 0
   m_NavMeshData: {fileID: 0}
+--- !u!1 &220056876 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 8692422332871777570, guid: 4fa5630b5db02f54fab98b14567397ab, type: 3}
+  m_PrefabInstance: {fileID: 8692422333850545493}
+  m_PrefabAsset: {fileID: 0}
+--- !u!95 &220056877
+Animator:
+  serializedVersion: 3
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 220056876}
+  m_Enabled: 1
+  m_Avatar: {fileID: 0}
+  m_Controller: {fileID: 9100000, guid: bf723efa5a9fe7a40bd8ac1b943f048d, type: 2}
+  m_CullingMode: 0
+  m_UpdateMode: 0
+  m_ApplyRootMotion: 0
+  m_LinearVelocityBlending: 0
+  m_WarningMessage: 
+  m_HasTransformHierarchy: 1
+  m_AllowConstantClipSamplingOptimization: 1
+  m_KeepAnimatorControllerStateOnDisable: 0
 --- !u!1 &601541772
 GameObject:
   m_ObjectHideFlags: 0
@@ -365,7 +389,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 8692422332871777580, guid: 4fa5630b5db02f54fab98b14567397ab, type: 3}
       propertyPath: m_LocalPosition.y
-      value: 4.06
+      value: 4.7
       objectReference: {fileID: 0}
     - target: {fileID: 8692422332871777580, guid: 4fa5630b5db02f54fab98b14567397ab, type: 3}
       propertyPath: m_LocalPosition.z
@@ -408,12 +432,36 @@ PrefabInstance:
       value: 
       objectReference: {fileID: 8745748230410068837, guid: 2daa67e6a8f26be45b0544c2e23475f2, type: 3}
     - target: {fileID: 8692422332871777581, guid: 4fa5630b5db02f54fab98b14567397ab, type: 3}
+      propertyPath: fab_foot
+      value: 
+      objectReference: {fileID: 8745748230410068837, guid: 4ff467952ab3bae4bb7247811484de06, type: 3}
+    - target: {fileID: 8692422332871777581, guid: 4fa5630b5db02f54fab98b14567397ab, type: 3}
       propertyPath: fab_head
       value: 
       objectReference: {fileID: 8745748230410068837, guid: f9d607ab56ef47249ab002fc3182715e, type: 3}
     - target: {fileID: 8692422332871777581, guid: 4fa5630b5db02f54fab98b14567397ab, type: 3}
+      propertyPath: fab_palm
+      value: 
+      objectReference: {fileID: 8745748230410068837, guid: 0a1bbcf605afbc845a707c2dd766e149, type: 3}
+    - target: {fileID: 8692422332871777581, guid: 4fa5630b5db02f54fab98b14567397ab, type: 3}
       propertyPath: fab_torso
       value: 
       objectReference: {fileID: 8745748230410068837, guid: dfdfe2c37a1bc46419de76715faf7505, type: 3}
+    - target: {fileID: 8692422332871777581, guid: 4fa5630b5db02f54fab98b14567397ab, type: 3}
+      propertyPath: fab_arm_low
+      value: 
+      objectReference: {fileID: 8745748230410068837, guid: e48c2193149e1a64384c3003e34ca6f3, type: 3}
+    - target: {fileID: 8692422332871777581, guid: 4fa5630b5db02f54fab98b14567397ab, type: 3}
+      propertyPath: fab_leg_low
+      value: 
+      objectReference: {fileID: 8745748230410068837, guid: 2daa67e6a8f26be45b0544c2e23475f2, type: 3}
+    - target: {fileID: 8692422332871777581, guid: 4fa5630b5db02f54fab98b14567397ab, type: 3}
+      propertyPath: fab_arm_high
+      value: 
+      objectReference: {fileID: 8745748230410068837, guid: 766cf66def0de49448c6ef5f40111f39, type: 3}
+    - target: {fileID: 8692422332871777581, guid: 4fa5630b5db02f54fab98b14567397ab, type: 3}
+      propertyPath: fab_leg_high
+      value: 
+      objectReference: {fileID: 8745748230410068837, guid: 7d2408f828d8c5c4e9963b8895f6de68, type: 3}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 4fa5630b5db02f54fab98b14567397ab, type: 3}
