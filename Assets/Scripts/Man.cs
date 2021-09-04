@@ -10,7 +10,7 @@ public class Man : MonoBehaviour
     enum State { Idle,Walk, Turn,Run, Sit, Crawl};
     bool is_left = true;
     State state;
-    float walk_cicle = 0.0f;
+    float walk_cicle = 0.0f,posture = 10.0f;
     public Body fab_head, fab_leg_low, fab_leg_high, fab_foot, fab_arm_high, fab_arm_low, fab_palm, fab_torso;
     private Body leg_high_l, leg_high_r, leg_low_r, leg_low_l, foot_r, foot_l, torso,head,arm_low_l, arm_low_r, arm_high_l, arm_high_r,palm_l,palm_r;
     private void Start()
@@ -91,28 +91,34 @@ public class Man : MonoBehaviour
     }
     private void FixedUpdate()
     {
+        float max_angle = 27.0f,add_angle = 40.0f,speed = 6.0f;
         if (state == State.Walk)
         {
-            walk_cicle += Time.fixedDeltaTime*4;
+            walk_cicle += Time.fixedDeltaTime* speed;
+            walk_cicle = (walk_cicle > Mathf.PI * 2) ? 0.0f : walk_cicle;
             int sign = is_left ? 1 : -1;
-            if (Mathf.Sin(walk_cicle) * 30.0f * sign > sign * leg_high_l.targetRotation)
+            if (Mathf.Sin(walk_cicle) * max_angle * sign < sign * leg_high_l.targetRotation)
             {
-                leg_low_l.targetRotation = (sign * 20.0f) + Mathf.Sin(walk_cicle) * 20.0f;
-                leg_low_r.targetRotation = -Mathf.Sin(walk_cicle) * 30.0f;
+                leg_low_l.targetRotation = (sign * Mathf.Cos(Mathf.Sin(walk_cicle) * Mathf.PI/2) * add_angle) + Mathf.Sin(walk_cicle) * max_angle;
+                leg_low_r.targetRotation = -Mathf.Sin(walk_cicle) * max_angle;
             }
             else
             {
-                leg_low_r.targetRotation = (sign * 20.0f) - Mathf.Sin(walk_cicle) * 20.0f;
-                leg_low_l.targetRotation = Mathf.Sin(walk_cicle) * 30.0f;
+                leg_low_r.targetRotation = (sign * Mathf.Cos(Mathf.Sin(walk_cicle) * Mathf.PI/2) * add_angle) - Mathf.Sin(walk_cicle) * max_angle;
+                leg_low_l.targetRotation = Mathf.Sin(walk_cicle) * max_angle;
             }
-            leg_high_l.targetRotation = Mathf.Sin(walk_cicle) * 30.0f;
+            leg_high_l.targetRotation = Mathf.Sin(walk_cicle) * max_angle;
             leg_high_r.targetRotation = -leg_high_l.targetRotation;
         }
         if (state == State.Turn)
         {
+            posture = -posture;
             state = State.Walk;
             is_left = !is_left;
+            torso.targetRotation = posture;
             walk_cicle = 0.0f;
+            leg_high_l.targetRotation = 0.0f;
+            leg_high_r.targetRotation = 0.0f;
             foot_r.targetRotation = -foot_r.targetRotation;
             foot_l.targetRotation = -foot_l.targetRotation;
         }
