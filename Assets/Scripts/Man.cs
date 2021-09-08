@@ -10,7 +10,7 @@ public class Man : MonoBehaviour
     enum State { Idle,Walk, Turn,Run, Sit, Crawl};
     bool is_left = true;
     State state;
-    float walk_cicle = 0.0f,posture = 10.0f;
+    float walk_cicle = 0.0f,posture = 7.0f;
     public Body fab_head, fab_leg_low, fab_leg_high, fab_foot, fab_arm_high, fab_arm_low, fab_palm, fab_torso;
     private Body leg_high_l, leg_high_r, leg_low_r, leg_low_l, foot_r, foot_l, torso,head,arm_low_l, arm_low_r, arm_high_l, arm_high_r,palm_l,palm_r;
     private void Start()
@@ -66,6 +66,7 @@ public class Man : MonoBehaviour
         arm_high_l.joint.distance = 0.02f;
         arm_high_r.joint.distance = 0.02f;
         head.joint.distance = 0.02f;
+        torso.targetRotation = posture;
     }
     private void Update()
     {
@@ -85,13 +86,18 @@ public class Man : MonoBehaviour
         }
         if (Input.GetKeyUp(KeyCode.A) || Input.GetKeyUp(KeyCode.D))
         {
+            walk_cicle = 0.0f;
+            leg_high_l.targetRotation = 0.0f;
+            leg_high_r.targetRotation = 0.0f;
+            leg_low_r.targetRotation = 0.0f;
+            leg_low_l.targetRotation = 0.0f;
             if (state == State.Walk)
                 state = State.Idle;
         }
     }
     private void FixedUpdate()
     {
-        float max_angle = 27.0f,add_angle = 40.0f,speed = 6.0f;
+        float max_angle = 30.0f,add_angle = 50.0f,speed = 6.0f,force = 30.0f;
         if (state == State.Walk)
         {
             walk_cicle += Time.fixedDeltaTime* speed;
@@ -109,6 +115,7 @@ public class Man : MonoBehaviour
             }
             leg_high_l.targetRotation = Mathf.Sin(walk_cicle) * max_angle;
             leg_high_r.targetRotation = -leg_high_l.targetRotation;
+            torso.rigid.AddForce(is_left? Vector2.left * force : Vector2.right* force);
         }
         if (state == State.Turn)
         {

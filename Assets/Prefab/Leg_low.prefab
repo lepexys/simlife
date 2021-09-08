@@ -141,7 +141,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   rigid: {fileID: 4944106940042649912}
   joint: {fileID: 4944106940042649915}
-  force: 300
+  force: 400
   targetRotation: 0
 --- !u!61 &-997538450675707473
 BoxCollider2D:
