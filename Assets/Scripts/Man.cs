@@ -13,6 +13,7 @@ public class Man : MonoBehaviour
     float walk_cicle = 0.0f,posture = 7.0f;
     public Body fab_head, fab_leg_low, fab_leg_high, fab_foot, fab_arm_high, fab_arm_low, fab_palm, fab_torso;
     private Body leg_high_l, leg_high_r, leg_low_r, leg_low_l, foot_r, foot_l, torso,head,arm_low_l, arm_low_r, arm_high_l, arm_high_r,palm_l,palm_r;
+    private List<Body> parts;
     private void Start()
     {
         state = 0;
@@ -67,6 +68,14 @@ public class Man : MonoBehaviour
         arm_high_r.joint.distance = 0.02f;
         head.joint.distance = 0.02f;
         torso.targetRotation = posture;
+        parts = new List<Body> { leg_high_l, leg_high_r, leg_low_r, leg_low_l, foot_r, foot_l, torso,head,arm_low_l, arm_low_r, arm_high_l, arm_high_r,palm_l,palm_r};
+    }
+    public void Move(float dist)
+    {
+        for(int i = 0;i< parts.Count; i++)
+        {
+            parts[i].transform.position += new Vector3(0,0,dist);
+        }
     }
     private void Update()
     {

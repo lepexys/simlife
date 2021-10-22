@@ -25,8 +25,4 @@ public class Ground : MonoBehaviour
             }
         }
     }
-    void Update()
-    {
-        //Update when new chunk need to be drawn
-    }
 }

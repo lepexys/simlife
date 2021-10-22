@@ -43,17 +43,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 8d94792e02087bd4aa28f70b16b43a75, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  leg_high_l: {fileID: 8745748230410068837, guid: 766cf66def0de49448c6ef5f40111f39, type: 3}
-  leg_high_r: {fileID: 8745748230410068837, guid: 766cf66def0de49448c6ef5f40111f39, type: 3}
-  leg_low_r: {fileID: 8745748230410068837, guid: 766cf66def0de49448c6ef5f40111f39, type: 3}
-  leg_low_l: {fileID: 8745748230410068837, guid: 766cf66def0de49448c6ef5f40111f39, type: 3}
-  foot_r: {fileID: 8745748230410068837, guid: 766cf66def0de49448c6ef5f40111f39, type: 3}
-  foot_l: {fileID: 8745748230410068837, guid: 766cf66def0de49448c6ef5f40111f39, type: 3}
-  torso: {fileID: 8745748230410068837, guid: 766cf66def0de49448c6ef5f40111f39, type: 3}
-  head: {fileID: 8745748230410068837, guid: 766cf66def0de49448c6ef5f40111f39, type: 3}
-  arm_low_l: {fileID: 8745748230410068837, guid: 766cf66def0de49448c6ef5f40111f39, type: 3}
-  arm_low_r: {fileID: 8745748230410068837, guid: 766cf66def0de49448c6ef5f40111f39, type: 3}
-  arm_high_l: {fileID: 8745748230410068837, guid: 766cf66def0de49448c6ef5f40111f39, type: 3}
-  arm_high_r: {fileID: 8745748230410068837, guid: 766cf66def0de49448c6ef5f40111f39, type: 3}
-  palm_l: {fileID: 8745748230410068837, guid: 766cf66def0de49448c6ef5f40111f39, type: 3}
-  palm_r: {fileID: 8745748230410068837, guid: 766cf66def0de49448c6ef5f40111f39, type: 3}
+  fab_head: {fileID: 8745748230410068837, guid: f9d607ab56ef47249ab002fc3182715e, type: 3}
+  fab_leg_low: {fileID: 8745748230410068837, guid: 2daa67e6a8f26be45b0544c2e23475f2, type: 3}
+  fab_leg_high: {fileID: 8745748230410068837, guid: 7d2408f828d8c5c4e9963b8895f6de68, type: 3}
+  fab_foot: {fileID: 8745748230410068837, guid: 4ff467952ab3bae4bb7247811484de06, type: 3}
+  fab_arm_high: {fileID: 8745748230410068837, guid: 766cf66def0de49448c6ef5f40111f39, type: 3}
+  fab_arm_low: {fileID: 8745748230410068837, guid: e48c2193149e1a64384c3003e34ca6f3, type: 3}
+  fab_palm: {fileID: 8745748230410068837, guid: 0a1bbcf605afbc845a707c2dd766e149, type: 3}
+  fab_torso: {fileID: 8745748230410068837, guid: dfdfe2c37a1bc46419de76715faf7505, type: 3}
