@@ -245,6 +245,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 924e6b37bb496b4448599e4690b10dd0, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  cam: {fileID: 963194227}
+  interpolation: 0.5
   fabG: {fileID: 2668852961451162103, guid: dc9eb2e8d823da449a1fb4dfc6544dce, type: 3}
   fabM: {fileID: 8692422332871777581, guid: 4fa5630b5db02f54fab98b14567397ab, type: 3}
 --- !u!4 &789471403
