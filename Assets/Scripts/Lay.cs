@@ -16,12 +16,12 @@ public class Lay : MonoBehaviour
         spline.Clear();
         for (int i = 0; i < width + 1; i++)
         {
-            if (y < PerlinNoizeGenerator.Instance.CalculateColor((int)(x + i), laynum).r)
+            if (y < PerlinNoizeGenerator.Instance.CalculateColor((int)(x + i), laynum).r*heigh)
                 spline.InsertPointAt(i, new Vector3(x + i * unit, y));
             else
             {
-                if (y - heigh * unit < PerlinNoizeGenerator.Instance.CalculateColor((int)(x + i), laynum).r)
-                    spline.InsertPointAt(i, new Vector3(x + i * unit, PerlinNoizeGenerator.Instance.CalculateColor((int)(x + i), laynum).r));
+                if (y - heigh * unit < PerlinNoizeGenerator.Instance.CalculateColor((int)(x + i), laynum).r*heigh)
+                    spline.InsertPointAt(i, new Vector3(x + i * unit, PerlinNoizeGenerator.Instance.CalculateColor((int)(x + i), laynum).r*heigh));
                 else
                     continue;
             }
