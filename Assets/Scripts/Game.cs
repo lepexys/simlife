@@ -24,7 +24,7 @@ public class PerlinNoizeGenerator
     private int width = 64;
     private int height = 32;
     int root;
-    private float sizeScale = 2.0f;
+    private float sizeScale = 10.0f;
 
     private float offsetX = 0.0f;
     private float offsetY = 0.0f;
@@ -80,6 +80,8 @@ public class PerlinNoizeGenerator
     public void Set_root(int r)
     {
         root = r;
+        offsetX = getRand(root);
+        offsetY = getRand((int)offsetX);
     }
     public int getRand(int X)
     {
@@ -89,17 +91,16 @@ public class PerlinNoizeGenerator
 
 public class Game : MonoBehaviour
 {
-    private float units = 0.5f;
+    public float units = 0.5f,maxheight = 4f;
     private List<Ground> ground = new List<Ground>();
     Vector3 offset = new Vector3(0f, 1f, -8f);
     public Camera cam;
-    [Range(0f, 1f)]public float interpolation;
     public Ground fabG;
     public Man fabM;
-    int cur_ground = 0, 
+    public int cur_ground = 0, 
         min_ground = -6, 
         max_ground = 6,
-        width = 1, height = 1;
+        pxwidth = 8;
     float dbl = 1.5f; //distance between layers
     int root;
     void Start()
@@ -111,8 +112,7 @@ public class Game : MonoBehaviour
         for (int i = min_ground; i <= max_ground; i++)
         {
             ground.Add(Instantiate(this.fabG, this.transform.position + new Vector3(0, 0, dbl * i), this.transform.rotation));
-            ground[i - min_ground].laynum = i;
-            ground[i - min_ground].Build_level(this.transform.position, units, width,height);
+            ground[i - min_ground].Build_level(this,i);
         }
     }
     public float getHeight(int x, int y)
@@ -121,11 +121,11 @@ public class Game : MonoBehaviour
     }
     void Spawn()
     {
-        fabM.transform.position = new Vector3(0,getHeight((int)offset.x, cur_ground) * height,cur_ground);
+        fabM.transform.position = new Vector3(0,getHeight((int)cam.transform.position.x, cur_ground) * maxheight,cur_ground);
     }
     private void CameraFollow()
     {
-        cam.transform.position = Vector3.Lerp(cam.transform.position, fabM.torso.transform.position + offset,interpolation);
+        cam.transform.position = fabM.torso.transform.position + offset;
     }
     void FixedUpdate()
     {
@@ -136,14 +136,13 @@ public class Game : MonoBehaviour
         if (Mathf.Abs(cam.transform.position.x - this.transform.position.x)>units*2)
         {
             this.transform.position = cam.transform.position;
-            ground[cur_ground - min_ground].Build_level(this.transform.position, units, width, height);
+            ground[cur_ground - min_ground].Load_new(this);
         }
         if (Input.GetKeyDown(KeyCode.W))
         {
             if (cur_ground < max_ground)
             {
                 fabM.Move(dbl);
-                offset.z += dbl;
                 cur_ground++;
             }
         }
@@ -152,7 +151,6 @@ public class Game : MonoBehaviour
             if (cur_ground > min_ground)
             {
                 fabM.Move(-dbl);
-                offset.z -= dbl;
                 cur_ground--;
             }
         }
