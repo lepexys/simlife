@@ -245,10 +245,19 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 924e6b37bb496b4448599e4690b10dd0, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  units: 0.5
   cam: {fileID: 963194227}
-  interpolation: 0.5
   fabG: {fileID: 2668852961451162103, guid: dc9eb2e8d823da449a1fb4dfc6544dce, type: 3}
   fabM: {fileID: 8692422332871777581, guid: 4fa5630b5db02f54fab98b14567397ab, type: 3}
+  man: {fileID: 0}
+  cur_ground: 0
+  min_ground: -10
+  max_ground: 10
+  dbl: 1.5
+  layer_depth: 0.5
+  layer_height_scale: 5
+  player_offset: 2
+  curPos: {x: 0, y: 0}
 --- !u!4 &789471403
 Transform:
   m_ObjectHideFlags: 0
@@ -340,7 +349,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 963194225}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: -0.27, y: 4.72, z: -20}
+  m_LocalPosition: {x: 0, y: 0, z: -20}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 0}

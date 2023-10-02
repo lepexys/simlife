@@ -25,7 +25,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 8692422332871777570}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: -0.32, y: 4.06, z: -3.1042786}
+  m_LocalPosition: {x: 0, y: 4.3263655, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 0}
@@ -43,6 +43,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 8d94792e02087bd4aa28f70b16b43a75, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  is_left: 1
+  state: 0
+  walk_cicle: 0
+  posture: 7
+  force_to_move: 0
   fab_head: {fileID: 8745748230410068837, guid: f9d607ab56ef47249ab002fc3182715e, type: 3}
   fab_leg_low: {fileID: 8745748230410068837, guid: 2daa67e6a8f26be45b0544c2e23475f2, type: 3}
   fab_leg_high: {fileID: 8745748230410068837, guid: 7d2408f828d8c5c4e9963b8895f6de68, type: 3}
@@ -51,3 +56,17 @@ MonoBehaviour:
   fab_arm_low: {fileID: 8745748230410068837, guid: e48c2193149e1a64384c3003e34ca6f3, type: 3}
   fab_palm: {fileID: 8745748230410068837, guid: 0a1bbcf605afbc845a707c2dd766e149, type: 3}
   fab_torso: {fileID: 8745748230410068837, guid: dfdfe2c37a1bc46419de76715faf7505, type: 3}
+  leg_high_l: {fileID: 0}
+  leg_high_r: {fileID: 0}
+  leg_low_r: {fileID: 0}
+  leg_low_l: {fileID: 0}
+  foot_r: {fileID: 0}
+  foot_l: {fileID: 0}
+  torso: {fileID: 0}
+  head: {fileID: 0}
+  arm_low_l: {fileID: 0}
+  arm_low_r: {fileID: 0}
+  arm_high_l: {fileID: 0}
+  arm_high_r: {fileID: 0}
+  palm_l: {fileID: 0}
+  palm_r: {fileID: 0}

@@ -44,4 +44,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   fab: {fileID: 5935676447855413043, guid: 547fec461d6314242835c2d4d3668b3e, type: 3}
-  curpos: {x: 0, y: 0, z: 0}
+  layer_number: 0
+  total_y: 10
+  total_x: 40

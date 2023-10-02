@@ -5,15 +5,16 @@ using UnityEngine;
 using UnityEngine.Experimental.U2D;
 using UnityEngine.U2D;
 
+public enum State { Idle, Walk, Turn, Run, Jump, Sit, Crawl };
+
 public class Man : MonoBehaviour
 {
-    enum State { Idle,Walk, Turn,Run, Sit, Crawl};
-    bool is_left = true;
-    State state;
-    float walk_cicle = 0.0f,posture = 7.0f;
+    public bool is_left = true;
+    public State state;
+    public float walk_cicle = 0.0f, posture = 7.0f, force_to_move = 0.0f;
     public Body fab_head, fab_leg_low, fab_leg_high, fab_foot, fab_arm_high, fab_arm_low, fab_palm, fab_torso;
     [HideInInspector]
-    public Body leg_high_l, leg_high_r, leg_low_r, leg_low_l, foot_r, foot_l, torso,head,arm_low_l, arm_low_r, arm_high_l, arm_high_r,palm_l,palm_r;
+    public Body leg_high_l, leg_high_r, leg_low_r, leg_low_l, foot_r, foot_l, torso,head, arm_low_l, arm_low_r, arm_high_l, arm_high_r, palm_l, palm_r;
     private List<Body> parts;
     private void Start()
     {
@@ -46,10 +47,10 @@ public class Man : MonoBehaviour
         arm_low_r.gameObject.layer = 8;
         arm_high_r.gameObject.layer = 8;
         palm_r.gameObject.layer = 8;
-        arm_high_l.joint.connectedAnchor += new Vector2(0, 0.1f);
-        arm_high_r.joint.connectedAnchor += new Vector2(0, 0.1f);
-        leg_high_l.joint.connectedAnchor += new Vector2(0, -0.01f);
-        leg_high_r.joint.connectedAnchor += new Vector2(0, -0.01f);
+        arm_high_l.joint.connectedAnchor += new Vector3(0, 0.1f, 0);
+        arm_high_r.joint.connectedAnchor += new Vector3(0, 0.1f, 0);
+        leg_high_l.joint.connectedAnchor += new Vector3(0, -0.01f, 0);
+        leg_high_r.joint.connectedAnchor += new Vector3(0, -0.01f, 0);
         leg_high_l.joint.connectedBody = torso.rigid;
         leg_high_r.joint.connectedBody = torso.rigid;
         arm_high_l.joint.connectedBody = torso.rigid;
@@ -63,13 +64,8 @@ public class Man : MonoBehaviour
         leg_low_r.joint.connectedBody= leg_high_r.rigid;
         foot_l.joint.connectedBody= leg_low_l.rigid;
         foot_r.joint.connectedBody= leg_low_r.rigid;
-        leg_high_l.joint.distance = 0.02f;
-        leg_high_r.joint.distance = 0.02f;
-        arm_high_l.joint.distance = 0.02f;
-        arm_high_r.joint.distance = 0.02f;
-        head.joint.distance = 0.02f;
         torso.targetRotation = posture;
-        parts = new List<Body> { leg_high_l, leg_high_r, leg_low_r, leg_low_l, foot_r, foot_l, torso,head,arm_low_l, arm_low_r, arm_high_l, arm_high_r,palm_l,palm_r};
+        parts = new List<Body> { leg_high_l, leg_high_r, leg_low_r, leg_low_l, foot_r, foot_l, torso, head, arm_low_l, arm_low_r, arm_high_l, arm_high_r, palm_l, palm_r};
     }
     public void Move(float dist)
     {
@@ -78,39 +74,17 @@ public class Man : MonoBehaviour
             parts[i].transform.position += new Vector3(0,0,dist);
         }
     }
-    private void Update()
-    {
-        if (Input.GetKeyDown(KeyCode.A))
-        {
-            if (!is_left)
-                state = State.Turn;
-            else
-                state = State.Walk;
-        }
-        if (Input.GetKeyDown(KeyCode.D))
-        {
-            if (is_left)
-                state = State.Turn;
-            else
-                state = State.Walk;
-        }
-        if (Input.GetKeyUp(KeyCode.A) || Input.GetKeyUp(KeyCode.D))
-        {
-            walk_cicle = 0.0f;
-            leg_high_l.targetRotation = 0.0f;
-            leg_high_r.targetRotation = 0.0f;
-            leg_low_r.targetRotation = 0.0f;
-            leg_low_l.targetRotation = 0.0f;
-            if (state == State.Walk)
-                state = State.Idle;
-        }
-    }
     private void FixedUpdate()
     {
-        float max_angle = 30.0f,add_angle = 50.0f,speed = 6.0f,force = 30.0f;
+        float max_angle = 30.0f, add_angle = 50.0f, speed = 6.0f, max_force = 100.0f, force_step = 5.0f, force_to_jump = 1000.0f;
+        if (state == State.Jump)
+        {
+            torso.rigid.AddForce(Vector2.up * force_to_jump);
+        }
         if (state == State.Walk)
         {
-            walk_cicle += Time.fixedDeltaTime* speed;
+            force_to_move = (force_to_move + force_step < max_force) ? force_to_move + force_step : max_force;
+            walk_cicle += Time.fixedDeltaTime * speed;
             walk_cicle = (walk_cicle > Mathf.PI * 2) ? 0.0f : walk_cicle;
             int sign = is_left ? 1 : -1;
             if (Mathf.Sin(walk_cicle) * max_angle * sign < sign * leg_high_l.targetRotation)
@@ -125,7 +99,7 @@ public class Man : MonoBehaviour
             }
             leg_high_l.targetRotation = Mathf.Sin(walk_cicle) * max_angle;
             leg_high_r.targetRotation = -leg_high_l.targetRotation;
-            torso.rigid.AddForce(is_left? Vector2.left * force : Vector2.right* force);
+            torso.rigid.AddForce(is_left ? Vector2.left * force_to_move : Vector2.right * force_to_move);
         }
         if (state == State.Turn)
         {

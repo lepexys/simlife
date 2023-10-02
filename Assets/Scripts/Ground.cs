@@ -7,77 +7,146 @@ using UnityEngine.U2D;
 
 public class Ground : MonoBehaviour
 {
-    private List<List<Lay>> Lays;
+    private LinkedList<LinkedList<Lay>> Lays;
     public Lay fab;
-    public int laynum,minuslays = 10,total_y = 10,total_x = 20;
-    int cur_x,cur_y;
-
-    public void Build_level(Game game, int num)
+    public int layer_number = 0, //layer number (depth)
+        total_y = 10, //height in Lays (TM)
+        total_x = 50; //width in Lays
+    int x_minuslays = 0; //offset in Lays
+    float x_cur, //left-right
+        y_cur; //bottom-top
+    float units = .0f;
+    public void Initialize(Game game, int layer_num)
     {
-        laynum = num;
-        float units = game.units;
-        Vector3 curpos = game.transform.position;
-        cur_x = (int)(curpos.x - (curpos.x / units - Mathf.Round(curpos.x / units))*units);
-        cur_y = (int)(curpos.y - (curpos.y / units - Mathf.Round(curpos.y / units))*units);
-        Lays = new List<List<Lay>>();
-        for (int i = 0; i < total_x; i++)
-        {
-            Lays.Add(new List<Lay>());
-            for (int j = 0; j < total_y; j++)
-            {
-                Lays[i].Add(Instantiate(this.fab, this.transform.position, this.transform.rotation));
-                Lays[i][j].Construct(game
-                    ,laynum
-                    , cur_x + game.pxwidth * units * (i - minuslays)
-                    , cur_y - units * j);
-            }
-        }
+        x_minuslays = total_x / 2;
+        layer_number = layer_num;
+        units = game.units;
+        Vector3 curpos = game.curPos;
+        x_cur = curpos.x - (curpos.x / units - (int)(curpos.x / units)) * units;
+        y_cur = curpos.y - (curpos.y / units - (int)(curpos.y / units)) * units;
+        Lays = new LinkedList<LinkedList<Lay>>();
+        LoadX(game, total_x, true);
     }
-    public void Load_new(Game game)
+    public void Load_new(Game game, bool is_x) // LOAD ONLY TOP BLOCKS AND MAKE MANY LAYERS!! 
     {
-        float units = game.units;
-        Vector3 curpos = game.transform.position;
-        curpos.x = (int)(curpos.x - (curpos.x / units - Mathf.Round(curpos.x / units)) * units);
-        curpos.y = (int)(curpos.y - (curpos.y / units - Mathf.Round(curpos.y / units)) * units);
-        if (curpos.x>cur_x)
+        Vector3 curpos = game.curPos;
+        curpos.x = curpos.x - (curpos.x / units - (int)(curpos.x / units)) * units;
+        curpos.y = curpos.y - (curpos.y / units - (int)(curpos.y / units)) * units;
+
+        if (is_x)
         {
-            int steps = (int)Mathf.Round((curpos.x - cur_x) / units);
-            for (int i = 0; i < steps; i++)
-                Lays.RemoveAt(i);
-            int offset = Lays.Count;
-            for (int i = offset;i< total_x; i++)
+            if (curpos.x > x_cur)
             {
-                Lays.Add(new List<Lay>());
-                for(int j = 0;j<total_y;j++)
+                int addition = (int)((curpos.x - x_cur) / units);
+                for (int i = 0; i < addition; i++)
                 {
-                    Lays[i].Add(Instantiate(this.fab, this.transform.position, this.transform.rotation));
-                    Lays[i][j].Construct(game
-                        ,laynum
-                        , cur_x + game.pxwidth * units * (i-minuslays)
-                        , cur_y - units * j);
+                    foreach (Lay lay in Lays.First.Value)
+                    {
+                        Destroy(lay);
+                    }
+                    Lays.RemoveFirst();
                 }
+                LoadX(game, addition, true);
+            }
+            else
+            {
+                int addition = (int)((x_cur - curpos.x) / units);
+                int offset = Lays.Count;
+                for (int i = offset - addition; i < offset; i++)
+                {
+                    foreach (Lay lay in Lays.Last.Value)
+                    {
+                        Destroy(lay);
+                    }
+                    Lays.RemoveLast();
+                }
+                LoadX(game, addition, false);
             }
         }
         else
         {
-            int steps = (int)Mathf.Round((cur_x-curpos.x) / units);
-            int offset = Lays.Count-steps;
-            for (int i = 0; i < steps; i++)
-                Lays.RemoveAt(offset+i);
-            for (int i = 0; i < steps; i++)
+            if (curpos.y > y_cur)
             {
-                Lays.Insert(i,new List<Lay>());
-                for (int j = 0; j < total_y; j++)
+                foreach (LinkedList<Lay> lay in Lays)
                 {
-                    Lays[i].Add(Instantiate(this.fab, this.transform.position, this.transform.rotation));
-                    Lays[i][j].Construct(game
-                        ,laynum
-                        , cur_x + game.pxwidth * units * (i - minuslays)
-                        , cur_y - units * j);
+                    if(lay.Last == null)
+                    {
+                        LoadY(game);
+                    }
+                    else if(lay.Last.Value.transform.position.y < curpos.y - total_y * units)
+                    {
+                        Destroy(lay.Last.Value);
+                        lay.RemoveLast();
+                    }
+                }
+            }
+            else
+            {
+                foreach (LinkedList<Lay> lay in Lays)
+                {
+                    if (lay.Last == null)
+                    {
+                        LoadY(game);
+                    }
+                    else if (lay.Last.Value.transform.position.y > curpos.y)
+                    {
+                        Destroy(lay.Last.Value);
+                        lay.RemoveLast();
+                    }
                 }
             }
         }
-        cur_x = (int)curpos.x;
-        cur_y = (int)curpos.y;
+        x_cur = curpos.x;
+        y_cur = curpos.y;
+    }
+    private void LoadY(Game game)
+    {
+        int i = 0;
+        foreach (LinkedList<Lay> lay in Lays)
+        {
+            for (int j = 0; j < total_y; j++)
+            {
+                if (lay.First == null)
+                {
+                    float x = x_cur + units * (i - x_minuslays)
+                        , y = y_cur - units * j
+                        , z = game.dbl * layer_number;
+                    float y_map = game.getHeight((int)x, (int)z);
+                    if (y_map >= y && y_map - units < y)
+                    {
+                        lay.AddFirst(Instantiate(this.fab, this.transform.position, this.transform.rotation));
+                        lay.Last.Value.Construct(game, x, y, z, true);
+                    }
+                }
+            }
+            i++;
+        }
+    }
+    private void LoadX(Game game, int amount, bool is_add_last)
+    {
+        for (int i = (is_add_last ? total_x - amount : amount); (is_add_last ? (i < total_x) : (i > 0)); i += (is_add_last ? 1 : (-1)))
+        {
+            if (is_add_last)
+            {
+                Lays.AddLast(new LinkedList<Lay>());
+            }
+            else
+            {
+                Lays.AddFirst(new LinkedList<Lay>());
+            }
+            int cur_index = 0;
+            for (int j = 0; j < total_y; j++)
+            {
+                float x = x_cur + units * (i - x_minuslays)
+                    , y = y_cur - units * j
+                    , z = game.dbl * layer_number;
+                float y_map = game.getHeight((int)x, (int)z);
+                if (y_map >= y && y_map - units < y)
+                {
+                    Lays.Last.Value.AddFirst(Instantiate(this.fab, this.transform.position, this.transform.rotation));
+                    Lays.Last.Value.Last.Value.Construct(game, x, y, z, true);
+                }
+            }
+        }
     }
 }
