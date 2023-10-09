@@ -67,11 +67,11 @@ public class Man : MonoBehaviour
         torso.targetRotation = posture;
         parts = new List<Body> { leg_high_l, leg_high_r, leg_low_r, leg_low_l, foot_r, foot_l, torso, head, arm_low_l, arm_low_r, arm_high_l, arm_high_r, palm_l, palm_r};
     }
-    public void Move(float dist)
+    public void Move(float dist_z, float dist_y = 0, float dist_x = 0)
     {
         for(int i = 0;i< parts.Count; i++)
         {
-            parts[i].transform.position += new Vector3(0,0,dist);
+            parts[i].transform.position += new Vector3(dist_x, dist_y, dist_z);
         }
     }
     private void FixedUpdate()

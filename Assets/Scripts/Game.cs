@@ -88,7 +88,7 @@ public class Game : MonoBehaviour
     {
         root = (int)Random.Range(0.0f, 1000000.0f);
         PerlinNoizeGenerator.Instance.Set_root(root);
-        man = Instantiate(this.fabM, new Vector3(0, getHeight(0, cur_ground) + player_offset, cur_ground), this.transform.rotation);
+        man = Instantiate(this.fabM, new Vector3(0, getHeight(0, (int)dbl * cur_ground) + player_offset, (int)dbl * cur_ground), this.transform.rotation);
         for (int i = min_ground; i <= max_ground; i++)
         {
             ground.Add(Instantiate(this.fabG, this.transform.position + new Vector3(0, 0, dbl * i), this.transform.rotation));
@@ -151,7 +151,9 @@ public class Game : MonoBehaviour
             {
                 if (cur_ground < max_ground)
                 {
-                    man.Move(dbl);
+                    float terrain_height = getHeight((int)man.torso.transform.position.x, (int)((cur_ground + 1) * dbl))
+                        , current_height = getHeight((int)man.torso.transform.position.x, (int)(cur_ground * dbl));
+                    man.Move(dbl, terrain_height - current_height);
                     cur_ground++;
                 }
             }
@@ -159,7 +161,9 @@ public class Game : MonoBehaviour
             {
                 if (cur_ground > min_ground)
                 {
-                    man.Move(-dbl);
+                    float terrain_height = getHeight((int)man.torso.transform.position.x, (int)((cur_ground - 1) * dbl))
+                        , current_height = getHeight((int)man.torso.transform.position.x, (int)(cur_ground * dbl));
+                    man.Move(-dbl, terrain_height - current_height);
                     cur_ground--;
                 }
             }

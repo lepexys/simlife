@@ -9,9 +9,9 @@ public class Ground : MonoBehaviour
 {
     private LinkedList<LinkedList<Lay>> Lays;
     public Lay fab;
-    public int layer_number = 0, //layer number (depth)
-        total_y = 10, //height in Lays (TM)
-        total_x = 50; //width in Lays
+    private int layer_number = 0, //layer number (depth)
+        total_y = 8, //height in Lays (TM)
+        total_x = 60; //width in Lays
     int x_minuslays = 0; //offset in Lays
     float x_cur, //left-right
         y_cur; //bottom-top
@@ -104,7 +104,7 @@ public class Ground : MonoBehaviour
         int i = 0;
         foreach (LinkedList<Lay> lay in Lays)
         {
-            for (int j = 0; j < total_y; j++)
+            for (int j = -total_y; j < total_y; j++)
             {
                 if (lay.First == null)
                 {
@@ -135,7 +135,7 @@ public class Ground : MonoBehaviour
                 Lays.AddFirst(new LinkedList<Lay>());
             }
             int cur_index = 0;
-            for (int j = 0; j < total_y; j++)
+            for (int j = -total_y; j < total_y; j++)
             {
                 float x = x_cur + units * (i - x_minuslays)
                     , y = y_cur - units * j
@@ -143,8 +143,16 @@ public class Ground : MonoBehaviour
                 float y_map = game.getHeight((int)x, (int)z);
                 if (y_map >= y && y_map - units < y)
                 {
-                    Lays.Last.Value.AddFirst(Instantiate(this.fab, this.transform.position, this.transform.rotation));
-                    Lays.Last.Value.Last.Value.Construct(game, x, y, z, true);
+                    if (is_add_last)
+                    {
+                        Lays.Last.Value.AddFirst(Instantiate(this.fab, this.transform.position, this.transform.rotation));
+                        Lays.Last.Value.Last.Value.Construct(game, x, y, z, true);
+                    }
+                    else
+                    {
+                        Lays.First.Value.AddFirst(Instantiate(this.fab, this.transform.position, this.transform.rotation));
+                        Lays.First.Value.Last.Value.Construct(game, x, y, z, true);
+                    }
                 }
             }
         }
